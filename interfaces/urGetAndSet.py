@@ -287,8 +287,8 @@ class GetAndSet:
 if __name__ == '__main__':
     c = GetAndSet()
 
-    c.adjustURposeForGet("1To1")
-    # c.adjustURposeForGet("1To2")
+    # c.adjustURposeForGet("1To1")
+    c.adjustURposeForGet("1To2")
     # c.adjustURposeForGet("2To1")
     # c.adjustURposeForGet("2To2")
 
