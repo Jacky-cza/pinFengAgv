@@ -111,6 +111,9 @@ class GetAndSet:
                     print("UR breakRelease error")
                     return False
 
+            # sleep(10)作用是机械臂刚上完电不加延迟就加载某个程序然后运行的时候会出现加载程序缓慢，运行程序状态位改变很慢的问题
+            time.sleep(10)
+
             print("total time:", time.time() - startTime)
             return True
         except Exception as e:
@@ -147,11 +150,11 @@ class GetAndSet:
                     print("load {} OK ".format(urPrograme))
                     break
 
-            # sleep(2)是因为上电后第一次加载程序会比较慢
-            time.sleep(2)
+            # sleep(2)是因为上电后第一次加载程序会比较慢,需要验证
+            time.sleep(0.5)
             c.play()
-            # sleep(3)是因为上电后第一次加载程序后程序执行状态更新会比较慢
-            time.sleep(3)
+            # sleep(3)是因为上电后第一次加载程序后程序执行状态更新会比较慢，需要验证
+            time.sleep(1)
             while True:
                 if c.programState().split(" ")[0] == "STOPPED":
                     print("play {} OK".format(urPrograme))
@@ -488,10 +491,10 @@ if __name__ == '__main__':
     #     print("UR start error")
     #     sys.exit()
 
-    if not c.adjustURposeForGet("1To2"):
-       print("get error")
-
-    print("OK")
+    # if not c.adjustURposeForGet("1To2"):
+    #    print("get error")
+    #
+    # print("OK")
 
     # c.adjustURposeForSet("1To1")
     # c.adjustURposeForSet("1To2")
