@@ -1,6 +1,6 @@
 import sys
 from dashboard_client import DashboardClient
-from baseCommunicate import Comm
+from interfaces.baseCommunicate import Comm
 import rtde_receive
 import rtde_control
 import math

@@ -1,10 +1,8 @@
 import sys
 from dashboard_client import DashboardClient
-from baseCommunicate import Comm
+from interfaces.baseCommunicate import Comm
 import rtde_receive
 import rtde_control
-import cv2
-import numpy as np
 import math
 import time
 import socket

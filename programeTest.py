@@ -12,7 +12,7 @@ import math
 # angle02 = np.sin(angle)
 # print(angle02)
 
-from interfaces.urGetAndSet import GetAndSet
+from interfaces.urPowerOnAndGetSet import GetAndSet
 from dashboard_client import DashboardClient
 import rtde_receive
 import rtde_control
@@ -33,16 +33,29 @@ import rtde_control
 #     print("Set Error")
 
 
-# c = DashboardClient("192.168.1.238")
-# c.connect()
-# if c.isConnected():
-#     print("UR connect OK")
-#
-# print(c.getLoadedProgram())
+c = DashboardClient("192.168.123.238")
+c.connect()
+if c.isConnected():
+    print("UR connect OK")
 
+# c.brakeRelease()
 
-rtdeReceive = rtde_receive.RTDEReceiveInterface("192.168.123.238")
-print(rtdeReceive.getActualTCPPose())
+# print(c.safetymode())
+# print(c.safetystatus())
+# c.powerOff()
+# print(c.getRobotModel())
+# c.powerOn()
+# c.brakeRelease()
+print(c.robotmode())
+
+"""
+Robotmode: POWER_OFF
+Robotmode: IDLE
+Robotmode: RUNNING
+"""
+
+# rtdeReceive = rtde_receive.RTDEReceiveInterface("192.168.123.238")
+# print(rtdeReceive.getActualTCPPose())
 """
 拍照位
 pose01:
@@ -59,3 +72,14 @@ y:-0.259
 z:0.108
 
 """
+# l = [1, 2, 3, 4, 5]
+# l.clear()
+# print(l)
+
+# from showDemos.baseCommunicate import Comm
+#
+# c=Comm()
+# c.connectStatePort()
+# print(c.getLocalizationStatus())
+
+# print(bool(None))
