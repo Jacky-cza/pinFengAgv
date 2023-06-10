@@ -33,10 +33,10 @@ import rtde_control
 #     print("Set Error")
 
 
-c = DashboardClient("192.168.123.238")
-c.connect()
-if c.isConnected():
-    print("UR connect OK")
+# c = DashboardClient("192.168.123.238")
+# c.connect()
+# if c.isConnected():
+#     print("UR connect OK")
 
 # c.brakeRelease()
 
@@ -46,7 +46,7 @@ if c.isConnected():
 # print(c.getRobotModel())
 # c.powerOn()
 # c.brakeRelease()
-print(c.robotmode())
+# print(c.robotmode())
 
 """
 Robotmode: POWER_OFF
