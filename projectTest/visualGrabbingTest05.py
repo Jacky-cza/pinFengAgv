@@ -73,6 +73,7 @@ def adjustURposeForSet(takePicResult):
     print("tcpInBaseMat:")
     print(tcpInBaseMat)
 
+    # 0.1273：相机镜头中心距离TCP中心的距离
     cameraInTcpMat = np.array([[1, 0, 0, 0], [0, 1, 0, -0.1273], [0, 0, 1, 0], [0, 0, 0, 1]])
 
     print("takePicResult:", takePicResult)
