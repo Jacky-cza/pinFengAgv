@@ -303,18 +303,24 @@ class GetAndSet:
             URprograme = None
             robotControlClient = rtde_control.RTDEControlInterface(self.robotID)
             if order == "1To1":
-                pose = robotControlClient.poseTrans(URpose, [0.081, -0.261, 0.11, 0, math.radians(1), -math.radians(1)])
+                pose = robotControlClient.poseTrans(URpose,
+                                                    [0.080, -0.26, 0.025, math.radians(0.5), math.radians(1),
+                                                     -math.radians(1.5)])
                 URprograme = "/programs/get_rack_and_back_to_1.urp"
             elif order == "1To2":
-                pose = robotControlClient.poseTrans(URpose, [0.081, -0.261, 0.11, 0, math.radians(1), -math.radians(1)])
+                pose = robotControlClient.poseTrans(URpose,
+                                                    [0.080, -0.26, 0.025, math.radians(0.5), math.radians(1),
+                                                     -math.radians(1.5)])
                 URprograme = "/programs/get_rack_and_back_to_2.urp"
             elif order == "2To1":
                 pose = robotControlClient.poseTrans(URpose,
-                                                    [-0.0977, -0.256, 0.11, 0, math.radians(1), -math.radians(1)])
+                                                      [-0.099, -0.258, 0.027, math.radians(0.5), math.radians(1),
+                                                       -math.radians(1)])
                 URprograme = "/programs/get_rack_and_back_to_1.urp"
             elif order == "2To2":
                 pose = robotControlClient.poseTrans(URpose,
-                                                    [-0.0977, -0.256, 0.11, 0, math.radians(1), -math.radians(1)])
+                                                    [-0.099, -0.258, 0.027, math.radians(0.5), math.radians(1),
+                                                     -math.radians(1)])
                 URprograme = "/programs/get_rack_and_back_to_2.urp"
 
             robotControlClient.moveJ_IK(pose)
@@ -437,29 +443,37 @@ class GetAndSet:
             robotControlClient = rtde_control.RTDEControlInterface(self.robotID)
             URprograme01 = URprograme02 = pose01 = pose02 = None
             if order == "1To1":
-                pose01 = robotControlClient.poseTrans(URpose, [0.081, 0, 0.09, 0, math.radians(1), -math.radians(1)])
+                pose01 = robotControlClient.poseTrans(URpose, [0.080, 0, 0.025, math.radians(0.5), math.radians(1),
+                                                               -math.radians(1.5)])
                 pose02 = robotControlClient.poseTrans(URpose,
-                                                      [0.081, -0.259, 0.11, 0, math.radians(1), -math.radians(1)])
+                                                      [0.080, -0.26, 0.025, math.radians(0.5), math.radians(1),
+                                                       -math.radians(1.5)])
                 URprograme01 = "/programs/get_rack_from_1.urp"
                 URprograme02 = "/programs/set_rack_to_1_and_back.urp"
             elif order == "1To2":
                 pose01 = robotControlClient.poseTrans(URpose,
-                                                      [-0.0977, 0, 0.09, 0, math.radians(1), -math.radians(1)])
+                                                      [-0.099, 0, 0.025, math.radians(0.5), math.radians(1),
+                                                       -math.radians(1)])
                 pose02 = robotControlClient.poseTrans(URpose,
-                                                      [-0.0977, -0.256, 0.11, 0, math.radians(1), -math.radians(1)])
+                                                      [-0.099, -0.258, 0.025, math.radians(0.5), math.radians(1),
+                                                       -math.radians(1)])
                 URprograme01 = "/programs/get_rack_from_1.urp"
                 URprograme02 = "/programs/set_rack_to_2_and_back.urp"
             elif order == "2To1":
-                pose01 = robotControlClient.poseTrans(URpose, [0.081, 0, 0.09, 0, math.radians(1), -math.radians(1)])
+                pose01 = robotControlClient.poseTrans(URpose, [0.080, 0, 0.025, math.radians(0.5), math.radians(1),
+                                                               -math.radians(1.5)])
                 pose02 = robotControlClient.poseTrans(URpose,
-                                                      [0.081, -0.259, 0.11, 0, math.radians(1), -math.radians(1)])
+                                                      [0.080, -0.26, 0.025, math.radians(0.5), math.radians(1),
+                                                       -math.radians(1.5)])
                 URprograme01 = "/programs/get_rack_from_2.urp"
                 URprograme02 = "/programs/set_rack_to_1_and_back.urp"
             elif order == "2To2":
                 pose01 = robotControlClient.poseTrans(URpose,
-                                                      [-0.0977, 0, 0.09, 0, math.radians(1), -math.radians(1)])
+                                                      [-0.099, 0, 0.025, math.radians(0.5), math.radians(1),
+                                                       -math.radians(1)])
                 pose02 = robotControlClient.poseTrans(URpose,
-                                                      [-0.0977, -0.256, 0.11, 0, math.radians(1), -math.radians(1)])
+                                                      [-0.099, -0.258, 0.025, math.radians(0.5), math.radians(1),
+                                                       -math.radians(1)])
                 URprograme01 = "/programs/get_rack_from_2.urp"
                 URprograme02 = "/programs/set_rack_to_2_and_back.urp"
             robotControlClient.disconnect()
@@ -472,7 +486,7 @@ class GetAndSet:
             robotControlClient.disconnect()
 
             robotControlClient = rtde_control.RTDEControlInterface(self.robotID)
-            robotControlClient.moveJ_IK(pose02)
+            robotControlClient.moveL(pose02)
             robotControlClient.disconnect()
 
             if not self.loadURprogrameAndPlay(URprograme02):
@@ -503,7 +517,7 @@ if __name__ == '__main__':
 
     # c.adjustURposeForGet("1To2")
     # c.adjustURposeForGet("2To1")
-    # c.adjustURposeForGet("2To2")
+    c.adjustURposeForGet("2To2")
     # c.adjustURposeForGet("1To1")
 
     # while True:
