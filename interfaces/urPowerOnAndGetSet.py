@@ -313,9 +313,10 @@ class GetAndSet:
                                                      -math.radians(1.5)])
                 URprograme = "/programs/get_rack_and_back_to_2.urp"
             elif order == "2To1":
+                # [-0.099, -0.258, 0.027] Z数值0.027与从上面1拿取不同是因为经过测试发现2位置拿取时候Z下降的高度是0.36,从1拿是0.34，所以0.27=0.25+0.02
                 pose = robotControlClient.poseTrans(URpose,
-                                                      [-0.099, -0.258, 0.027, math.radians(0.5), math.radians(1),
-                                                       -math.radians(1)])
+                                                    [-0.099, -0.258, 0.027, math.radians(0.5), math.radians(1),
+                                                     -math.radians(1)])
                 URprograme = "/programs/get_rack_and_back_to_1.urp"
             elif order == "2To2":
                 pose = robotControlClient.poseTrans(URpose,
