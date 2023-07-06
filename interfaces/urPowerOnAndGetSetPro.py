@@ -23,7 +23,7 @@ class GetAndSet:
                 try:
                     c.connect()
                     if c.isConnected():
-                        print("connect UR  ok")
+                        print("connect UR ok")
                         print("connect time:", time.time() - startConnectTime)
                         break
                     if time.time() - startConnectTime > 180:
@@ -154,7 +154,7 @@ class GetAndSet:
             time.sleep(0.5)
             c.play()
             # sleep(3)是因为上电后第一次加载程序后程序执行状态更新会比较慢，需要验证
-            time.sleep(1)
+            time.sleep(0.5)
             while True:
                 if c.programState().split(" ")[0] == "STOPPED":
                     print("play {} OK".format(urPrograme))
@@ -277,28 +277,17 @@ class GetAndSet:
 
             x = takePicResult["TranslationX"] / 1000
             y = takePicResult["TranslationY"] / 1000
+            print("X:", x)
+            print("Y:", y)
+
             robotReceiveClient = rtde_receive.RTDEReceiveInterface(self.robotID)
             URpose = robotReceiveClient.getActualTCPPose()
             robotReceiveClient.disconnect()
 
             robotControlClient = rtde_control.RTDEControlInterface(self.robotID)
-            pose = robotControlClient.poseTrans(URpose, [x, y, 0, 0, 0, 0])
-            robotControlClient.moveL(pose)
+            URpose = robotControlClient.poseTrans(URpose, [x, y, 0, 0, 0, 0])
+            # 只拍照计算位姿，不移动UR，节省时间
             robotControlClient.disconnect()
-
-            takePicResult = self.take_pic()
-            if not takePicResult:
-                print("takePicResult03 is false")
-            else:
-                print("takePicResult03:", takePicResult)
-                if takePicResult["MatchScore"] < 90:
-                    print("MatchScore is too low")
-                else:
-                    print("MatchScore is OK")
-
-            robotReceiveClient = rtde_receive.RTDEReceiveInterface(self.robotID)
-            URpose = robotReceiveClient.getActualTCPPose()
-            robotReceiveClient.disconnect()
 
             URprograme = None
             robotControlClient = rtde_control.RTDEControlInterface(self.robotID)
@@ -423,29 +412,16 @@ class GetAndSet:
             robotReceiveClient.disconnect()
 
             robotControlClient = rtde_control.RTDEControlInterface(self.robotID)
-            pose = robotControlClient.poseTrans(URpose, [x, y, 0, 0, 0, 0])
-            robotControlClient.moveL(pose)
+            URpose = robotControlClient.poseTrans(URpose, [x, y, 0, 0, 0, 0])
+            # 只计算不移动
             robotControlClient.disconnect()
-
-            takePicResult = self.take_pic()
-            if not takePicResult:
-                print("takePicResult03 is false")
-            else:
-                print("takePicResult03:", takePicResult)
-                if takePicResult["MatchScore"] < 90:
-                    print("MatchScore is too low")
-                else:
-                    print("MatchScore is OK")
-
-            robotReceiveClient = rtde_receive.RTDEReceiveInterface(self.robotID)
-            URpose = robotReceiveClient.getActualTCPPose()
-            robotReceiveClient.disconnect()
 
             robotControlClient = rtde_control.RTDEControlInterface(self.robotID)
             URprograme01 = URprograme02 = pose01 = pose02 = None
             if order == "1To1":
-                pose01 = robotControlClient.poseTrans(URpose, [0.080, 0, 0.025, math.radians(0.5), math.radians(1),
-                                                               -math.radians(1.5)])
+                pose01 = robotControlClient.poseTrans(URpose,
+                                                      [0.080, 0, 0.025, math.radians(0.5), math.radians(1),
+                                                       -math.radians(1.5)])
                 pose02 = robotControlClient.poseTrans(URpose,
                                                       [0.080, -0.26, 0.025, math.radians(0.5), math.radians(1),
                                                        -math.radians(1.5)])
@@ -500,6 +476,7 @@ class GetAndSet:
 
 
 if __name__ == '__main__':
+    beginTime = time.time()
     c = GetAndSet()
 
     # if not c.powerOnAndReleaseUR():
@@ -510,7 +487,7 @@ if __name__ == '__main__':
     #    print("get error")
     # print("OK")
 
-    # c.adjustURposeForSet("1To1")
+    c.adjustURposeForSet("1To1")
     # c.adjustURposeForSet("1To2")
     # c.adjustURposeForSet("2To1")
     # c.adjustURposeForSet("2To2")
@@ -564,3 +541,5 @@ if __name__ == '__main__':
     #         break
     #     count += 1
     #     print("has already run {} times".format(count))
+
+    print("total time:", time.time() - beginTime)

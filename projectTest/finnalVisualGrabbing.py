@@ -14,7 +14,7 @@ import json
 def take_pic():
     s = None
     try:
-        ip = "192.168.1.66"
+        ip = "192.168.123.237"
         port = 3000
         s = socket.socket()
         s.connect((ip, port))
@@ -74,7 +74,10 @@ def adjustURposeForSet(takePicResult):
     print(tcpInBaseMat)
 
     # 0.1273：相机镜头中心距离TCP中心的距离
-    cameraInTcpMat = np.array([[1, 0, 0, 0], [0, 1, 0, -0.1273], [0, 0, 1, 0], [0, 0, 0, 1]])
+    cameraInTcpMat = np.array([[1, 0, 0, 0],
+                               [0, 1, 0, -0.1273],
+                               [0, 0, 1, 0],
+                               [0, 0, 0, 1]])
 
     print("takePicResult:", takePicResult)
     # 单位是 m
@@ -83,21 +86,27 @@ def adjustURposeForSet(takePicResult):
     # 单位是弧度
     angle = math.radians(takePicResult["Angle"] - 0.5)
 
-    # 相机坐标系？ mark坐标系？
+    # 相机相对于之前的零位的旋转和偏移，当做在同一个高度，0.09是让TCP下降一定高度
     markInCameraMat = np.array(
         [[math.cos(angle), -math.sin(angle), 0, transX + 0.008],
          [math.sin(angle), math.cos(angle), 0, transY - 0.004],
          [0, 0, 1, 0.09],
          [0, 0, 0, 1]])
 
-    # mark坐标系？
-    rackInMarkMat = np.array([[1, 0, 0, 0.09], [0, 1, 0, -0.13325], [0, 0, 1, 0.03], [0, 0, 0, 1]])
+    # 试管篮相对于mark坐标系的相对偏移，可以按照棋格板标定的坐标系来规定方向
+    rackInMarkMat = np.array([[1, 0, 0, 0.09],
+                              [0, 1, 0, -0.13325],
+                              [0, 0, 1, 0.03],
+                              [0, 0, 0, 1]])
+    # 试管篮在相机坐标系下面的矩阵
     rackInCamerMat = np.dot(markInCameraMat, rackInMarkMat)
+    # 试管篮在TCP下面的矩阵
     rackInTcpMat = np.dot(cameraInTcpMat, rackInCamerMat)
+    # 试管篮在Base坐标系下面的矩阵
     rackInBaseMat = np.dot(tcpInBaseMat, rackInTcpMat)
-
+    # 试管篮在Base坐标系下面的矩阵的旋转向量
     rackInBaseMatRotateVector = cv2.Rodrigues(rackInBaseMat[:3, :3])[0]
-
+    # 试管篮在Base坐标系下面的最终位姿
     ur_finnal_pose = [rackInBaseMat[0][3], rackInBaseMat[1][3], rackInBaseMat[2][3], rackInBaseMatRotateVector[0][0],
                       rackInBaseMatRotateVector[1][0],
                       rackInBaseMatRotateVector[2][0]]
@@ -109,7 +118,7 @@ def adjustURposeForSet(takePicResult):
 if __name__ == '__main__':
     pose = None
 
-    c = DashboardClient("192.168.1.20")
+    c = DashboardClient("192.168.123.238")
     c.connect()
     if c.isConnected():
         print("connect UR OK")
@@ -118,7 +127,7 @@ if __name__ == '__main__':
         sys.exit()
 
     takePicResult = None
-    if loadURprogrameAndPlay("/programs/pf/take_pic_pos.urp"):
+    if loadURprogrameAndPlay("/programs/pf/take_pic.urp"):
         time.sleep(0.5)
 
     takePicResult = take_pic()
@@ -136,6 +145,6 @@ if __name__ == '__main__':
     if loadURprogrameAndPlay("/programs/pf/set_1_to_1.urp"):
         print("set_1_to_1 OK")
 
-    robotControlClient = rtde_control.RTDEControlInterface("192.168.1.20")
+    robotControlClient = rtde_control.RTDEControlInterface("192.168.123.238")
     robotControlClient.moveJ_IK(pose)
     print("get pose already")
