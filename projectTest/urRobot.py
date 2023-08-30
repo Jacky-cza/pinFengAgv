@@ -1,13 +1,13 @@
-# import sys
-# import time
-# from dashboard_client import DashboardClient
-# import rtde_receive
-# import rtde_control
-# import cv2
-# import numpy as np
-# import math
-#
-#
+import sys
+import time
+from dashboard_client import DashboardClient
+import rtde_receive
+import rtde_control
+import cv2
+import numpy as np
+import math
+
+
 # # 检查一个旋转矩阵是否有效
 # def isRotationMatrix(R):
 #     # 得到该矩阵的转置
@@ -71,9 +71,9 @@
 # print(robotControlClient.getTCPOffset())
 # robotControlClient.movePath()
 # #
-# # robotReceiveClient = rtde_receive.RTDEReceiveInterface("192.168.1.20")
-# # robotPose = robotReceiveClient.getActualTCPPose()
-# # print(robotPose)
+robotReceiveClient = rtde_receive.RTDEReceiveInterface("192.168.123.238")
+robotPose = robotReceiveClient.getActualTCPPose()
+print(robotPose)
 # #
 # # tcp_in_base_rotate_mat = cv2.Rodrigues((robotPose[3], robotPose[4], robotPose[5]))[0]
 # # print("tcp_in_base_rotate_mat:", tcp_in_base_rotate_mat)
@@ -128,10 +128,11 @@ Safetymode: NORMAL
 
 """
 
-print(c.robotmode())
+# print(c.robotmode())
 """
 Robotmode: POWER_OFF 没上电之前
 Robotmode: IDLE     解抱闸之前
 Robotmode: RUNNING  解抱闸之后
 """
+
 
